@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/nav_lista">
+
+    <fragment
+        android:id="@+id/nav_lista"
+        android:name="com.example.uxersiipmchido.ui.home.HomeFragment"
+        android:label="@string/menu_lista"
+        tools:layout="@layout/fragment_home" />
+
+    <fragment
+        android:id="@+id/nav_donacion"
+        android:name="com.example.uxersiipmchido.ui.Donacion.GalleryFragment"
+        android:label="@string/menu_donar"
+        tools:layout="@layout/fragment_gallery" />
+
+    <fragment
+        android:id="@+id/nav_buscar"
+        android:name="com.example.uxersiipmchido.ui.Buscar.SlideshowFragment"
+        android:label="@string/menu_buscar"
+        tools:layout="@layout/fragment_slideshow" />
+</navigation>

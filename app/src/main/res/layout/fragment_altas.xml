@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="400dp"
+    android:layout_height="500dp"
+    android:orientation="vertical"
+    android:layout_gravity="center"
+    android:padding="16dp">
+
+    <ImageButton
+        android:id="@+id/cerrarF"
+        android:layout_width="43dp"
+        android:layout_height="34dp"
+        android:layout_gravity="end"
+        android:src="@drawable/cerrarpopup"/>
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/nombF"
+        android:hint="Nombre del Producto"
+        android:layout_gravity="center"
+        android:layout_marginBottom="10dp"/>
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/presF"
+        android:hint="Precio"
+        android:inputType="numberSigned"
+        android:layout_gravity="center"
+        android:layout_marginBottom="10dp"/>
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/cantF"
+        android:hint="Cantidad"
+        android:inputType="number"
+        android:layout_gravity="center"
+        android:layout_marginBottom="10dp"/>
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/fechCadF"
+        android:hint="Fecha de Caducidad"
+        android:inputType="datetime"
+        android:layout_gravity="center"
+        android:layout_marginBottom="10dp"/>
+    <ImageView
+        android:layout_width="130dp"
+        android:layout_height="120dp"
+        android:id="@+id/imgF"
+        android:clickable="true"
+        android:src="@drawable/camara"
+        android:layout_gravity="center"
+        android:layout_marginBottom="10dp"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/guardarF"
+        android:text="Guardar"
+        android:layout_gravity="center"
+        />
+
+
+</LinearLayout>
