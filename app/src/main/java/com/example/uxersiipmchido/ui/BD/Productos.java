@@ -3,7 +3,7 @@ package com.example.uxersiipmchido.ui.BD;
 import com.google.gson.annotations.SerializedName;
 
 public class Productos {
-    @SerializedName("nom_alim")
+    @SerializedName("nomb_alim")
     private String nomAlim;
     @SerializedName("cantidad")
     private int cantidad;
@@ -21,7 +21,7 @@ public class Productos {
     @SerializedName("fecha_cad")
     private String fechaCad;
     @SerializedName("costo")
-    private int precio;
+    private double precio;
     @SerializedName("imagen")
     private String urlimg;
 
@@ -44,11 +44,11 @@ public class Productos {
         this.urlimg = urlimg;
     }
 
-    public int getPrecio() {
+    public double getPrecio() {
         return precio;
     }
 
-    public void setPrecio(int precio) {
+    public void setPrecio(double precio) {
         this.precio = precio;
     }
 

@@ -26,6 +26,6 @@ public class Pcarga extends AppCompatActivity {
             }
         };
         Timer sec = new Timer();
-        sec.schedule(tcarga, 3000);
+        sec.schedule(tcarga, 100);
     }
 }

@@ -59,7 +59,7 @@ public class ProductosAdapter extends BaseAdapter {
         }
         Productos produc= productos.get(position);
         holder.nombTxt.setText(produc.getNomAlim());
-        int pres = produc.getPrecio();
+        double pres = produc.getPrecio();
         if (pres != 0){
             holder.presTxt.setText(String.valueOf(pres));
         }else{
@@ -67,8 +67,7 @@ public class ProductosAdapter extends BaseAdapter {
         }
         holder.cantTxt.setText(String.valueOf(produc.getCantidad()));
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
-        String fechaCadStr = sdf.format(produc.getFechaCad());
-        holder.fechTxt.setText(fechaCadStr);
+        holder.fechTxt.setText(produc.getFechaCad());
         Picasso.get().load(produc.getUrlimg()).into(holder.imgVis);
         return convertView;
     }

@@ -1,5 +1,6 @@
 package com.example.uxersiipmchido.ui.home;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -35,11 +36,17 @@ public class HomeFragment extends Fragment {
     ListView lista;
     ProductosAdapter adap;
     retroService retro;
+    String idPunto;
     public View onCreateView(@NonNull LayoutInflater inflater,
             ViewGroup container, Bundle savedInstanceState) {
-        Productos productos = new Productos();
         View view = inflater.inflate(R.layout.fragment_home, container, false);
-        String idPunto = getArguments() != null ? getArguments().getString("id_producto") : "";
+        if (getActivity() != null){
+            Intent intent = getActivity().getIntent();
+            if (intent != null && intent.hasExtra("id_producto")){
+                idPunto = intent.getStringExtra("id_producto");
+            }
+
+        }
         Log.d("TAG","el valor que se recibe en la lista: " + idPunto);
         lista = view.findViewById(R.id.inv);
         retro = retroClient.getRetrofitInstance().create(retroService.class);
@@ -50,13 +57,18 @@ public class HomeFragment extends Fragment {
                 if (response.isSuccessful() && response.body() != null) {
                     try {
                         JsonObject jsonObject = response.body();
+                        //Log.d("TAG",jsonObject.toString());
+
 
                         if (jsonObject.has("productos")) {
                             Gson gson = new Gson();
                             Type productListType = new TypeToken<List<Productos>>(){}.getType();
                             List<Productos> productos = gson.fromJson(jsonObject.get("productos"), productListType);
+                            Log.d("TAG",productos.toString());
 
                             for (Productos producto : productos) {
+                                Log.d("TAG","Nombre del alimento: " +producto.getNomAlim());
+
                                 try {
                                     String fechaCadFormateada = producto.getFechaCad();  // La fecha ya está en formato String
                                     Log.d("DatosProducto", "Nombre: " + producto.getNomAlim() +
