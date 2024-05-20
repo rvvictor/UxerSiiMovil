@@ -50,7 +50,7 @@ public class altasF extends DialogFragment {
     int REQUEST_IMAGE_CAPTURE = 1;
     String fechaFormateada;
     Retrofit retrofit;
-    static final String BASE_URL="https://k91n550s-8000.usw3.devtunnels.ms//uxersiiPruebas/" ;
+    static final String BASE_URL="https://781hhnms-8000.usw3.devtunnels.ms/uxersiiPruebas/" ;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -166,7 +166,7 @@ public class altasF extends DialogFragment {
                 if (extras != null && extras.containsKey("data")) {
                     Bitmap imageBitmap = (Bitmap) extras.get("data");
                     if (imageBitmap != null) {
-                        Bitmap redimg = Bitmap.createScaledBitmap(imageBitmap,150,150,true);
+                        Bitmap redimg = Bitmap.createScaledBitmap(imageBitmap,300,300,true);
                         imgProduc.setImageBitmap(redimg);
                     } else {
                         Toast.makeText(requireContext(), "No se pudo capturar la imagen", Toast.LENGTH_SHORT).show();
