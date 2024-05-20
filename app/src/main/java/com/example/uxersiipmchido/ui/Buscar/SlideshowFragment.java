@@ -14,7 +14,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -25,54 +28,63 @@ import com.google.zxing.integration.android.IntentResult;
 
 public class SlideshowFragment extends Fragment {
 
-    ImageView scan, search;
-    EditText qrval;
-    private static final int REQUEST_CODE_QR_SCAN = 101;
+        private ImageView scan, search;
+        private EditText qrval;
+        private ActivityResultLauncher<Intent> qrScanLauncher;
 
-    public View onCreateView(@NonNull LayoutInflater inflater,
-            ViewGroup container, Bundle savedInstanceState) {
-    View view= inflater.inflate(R.layout.fragment_slideshow, container, false);
-    qrval=view.findViewById(R.id.qrcode);
-    scan=view.findViewById(R.id.escaner);
-    scan.setOnClickListener(new View.OnClickListener() {
+        @Nullable
         @Override
-        public void onClick(View v) {
-            escanearQR();
-        }
-    });
-    search=view.findViewById(R.id.buscar);
-    search.setOnClickListener(new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            buscarCode();
-        }
-    });
-    return view;
-    }
-    private void buscarCode(){
+        public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+            View view = inflater.inflate(R.layout.fragment_slideshow, container, false);
 
-    }
-    private void escanearQR(){
-        IntentIntegrator integrator = new IntentIntegrator(requireActivity());
-        integrator.setOrientationLocked(false);
-        integrator.initiateScan();
-    }
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data){
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUEST_CODE_QR_SCAN) {
-            IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
-            if (result != null) {
-                if (result.getContents() == null) {
-                    Toast.makeText(requireContext(), "Operación cancelada", Toast.LENGTH_SHORT).show();
-                } else {
-                    String qrCodeValue = result.getContents();
-                    qrval.setText(qrCodeValue);
+            qrval = view.findViewById(R.id.qrcode);
+            scan = view.findViewById(R.id.escaner);
+            search = view.findViewById(R.id.buscar);
+
+            // Initialize the ActivityResultLauncher
+            qrScanLauncher = registerForActivityResult(
+                    new ActivityResultContracts.StartActivityForResult(),
+                    result -> {
+                        if (result.getResultCode() == Activity.RESULT_OK && result.getData() != null) {
+                            IntentResult intentResult = IntentIntegrator.parseActivityResult(result.getResultCode(), result.getData());
+                            if (intentResult != null) {
+                                if (intentResult.getContents() == null) {
+                                    Toast.makeText(requireContext(), "Operación cancelada", Toast.LENGTH_SHORT).show();
+                                } else {
+                                    String qrCodeValue = intentResult.getContents();
+                                    Toast.makeText(requireContext(), qrCodeValue, Toast.LENGTH_SHORT).show();
+                                    qrval.setText(qrCodeValue);
+                                }
+                            }
+                        } else {
+                            Toast.makeText(requireContext(), "Error en escaneo", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+            );
+
+            scan.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    escanearQR();
                 }
-            } else {
-                super.onActivityResult(requestCode, resultCode, data);
-            }
+            });
+
+            search.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    buscarCode();
+                }
+            });
+
+            return view;
+        }
+
+        private void buscarCode() {
+            // Implementar la lógica de búsqueda
+        }
+
+        private void escanearQR() {
+            IntentIntegrator intentIntegrator = new IntentIntegrator(requireActivity());
+            qrScanLauncher.launch(intentIntegrator.createScanIntent());
         }
     }
-
-}
