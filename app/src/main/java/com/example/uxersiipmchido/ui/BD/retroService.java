@@ -38,4 +38,7 @@ public interface retroService {
     @GET("api/v1/valcod/{codigo}/")
     Call<JsonObject> validarCodigo(@Path("codigo") String codigo);
 
+    @GET("api/v1/getalimqr/{qr}/")
+    Call<JsonObject> buscarQR(@Path("qr") String qr);
+
 }
