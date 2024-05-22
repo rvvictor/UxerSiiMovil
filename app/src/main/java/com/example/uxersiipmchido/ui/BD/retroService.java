@@ -40,5 +40,6 @@ public interface retroService {
 
     @GET("api/v1/getalimqr/{qr}/")
     Call<JsonObject> buscarQR(@Path("qr") String qr);
-
+    @GET("api/v1/getdonqr/{qr}/")
+    Call<JsonObject> buscarQRDon(@Path("qr") String qr);
 }
