@@ -1,12 +1,15 @@
 package com.example.uxersiipmchido.ui.Donacion;
 
 import android.app.Activity;
+import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -20,6 +23,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.example.uxersiipmchido.MainActivity;
 import com.example.uxersiipmchido.R;
 import com.example.uxersiipmchido.databinding.FragmentGalleryBinding;
 import com.example.uxersiipmchido.ui.BD.Productos;
@@ -33,33 +37,68 @@ import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
 import java.lang.reflect.Type;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
+import okhttp3.MediaType;
+import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 public class GalleryFragment extends Fragment {
-    private ImageView scan, search;
-    private EditText qrval;
+    ImageView scan, search;
+    TextView txt;
+    EditText qrval, nomD, cantD, fechD;
+    Calendar calendar;
+    String fechaFormateada;
+    Button addDon, finD;
     private ActivityResultLauncher<Intent> qrScanLauncher;
-    retroService retro;
+    Retrofit retrofit;
     String qrCodeValue;
+    retroService retro;
+    static final String BASE_URL="https:/k91n550s-8000.usw3.devtunnels.ms/uxersiiPruebas/" ;
 
-    ListView listaCompra;
-
+    String idPunto;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_slideshow, container, false);
-
+        View view = inflater.inflate(R.layout.fragment_gallery, container, false);
+        idPunto = getArguments().getString("id_producto");
         qrval = view.findViewById(R.id.qrcode);
+        txt=view.findViewById(R.id.altasDona);
         scan = view.findViewById(R.id.escaner);
         search = view.findViewById(R.id.buscar);
-        listaCompra=view.findViewById(R.id.compraL);
+        nomD=view.findViewById(R.id.nombDona);
+        cantD=view.findViewById(R.id.cantDon);
+        fechD=view.findViewById(R.id.dateDon);
+        addDon=view.findViewById(R.id.añadirdon);
+        addDon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                altasDon();
+            }
+        });
 
+        calendar=Calendar.getInstance();
 
-        // Initialize the ActivityResultLauncher
+        fechD.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mostrarCalendario();
+            }
+        });
+
+        retrofit = new Retrofit.Builder()
+                .baseUrl(BASE_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
         qrScanLauncher = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
                 result -> {
@@ -80,6 +119,13 @@ public class GalleryFragment extends Fragment {
                 }
         );
 
+        finD=view.findViewById(R.id.finDon);
+        finD.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finalizarDon(qrCodeValue);
+            }
+        });
         scan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -102,7 +148,14 @@ public class GalleryFragment extends Fragment {
         call.enqueue(new Callback<JsonObject>() {
             @Override
             public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
-                
+                if (response.isSuccessful()){
+                    txt.setVisibility(View.VISIBLE);
+                    nomD.setVisibility(View.VISIBLE);
+                    cantD.setVisibility(View.VISIBLE);
+                    fechD.setVisibility(View.VISIBLE);
+                    addDon.setVisibility(View.VISIBLE);
+                    finD.setVisibility(View.VISIBLE);
+                }
             }
 
             @Override
@@ -116,5 +169,89 @@ public class GalleryFragment extends Fragment {
         IntentIntegrator intentIntegrator = new IntentIntegrator(requireActivity());
         qrScanLauncher.launch(intentIntegrator.createScanIntent());
     }
+    private void mostrarCalendario() {
+        final Calendar calendario = Calendar.getInstance();
+        int year = calendario.get(Calendar.YEAR);
+        int mes = calendario.get(Calendar.MONTH);
+        int dia = calendario.get(Calendar.DAY_OF_MONTH);
 
+        DatePickerDialog datePickerDialog = new DatePickerDialog(requireContext(),
+                new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                        Calendar selectedDate = Calendar.getInstance();
+                        selectedDate.set(year, month, dayOfMonth);
+                        Date fechaSeleccionada = selectedDate.getTime();
+                        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+                        fechaFormateada = sdf.format(fechaSeleccionada);
+                        fechD.setText(fechaFormateada);
+                    }
+                }, year, mes, dia);
+        datePickerDialog.show();
+    }
+    public void altasDon(){
+        Productos producto = new Productos();
+        producto.setNomAlim(nomD.getText().toString());
+        producto.setCantidad(Integer.parseInt(cantD.getText().toString()));
+        producto.setFechaCad(fechaFormateada);
+        retroService donService = retrofit.create(retroService.class);
+        RequestBody nomAlimPart = RequestBody.create(MediaType.parse("text/plain"), producto.getNomAlim());
+        RequestBody cantidadPart = RequestBody.create(MediaType.parse("text/plain"), String.valueOf(producto.getCantidad()));
+        RequestBody fechaCadPart = RequestBody.create(MediaType.parse("text/plain"), producto.getFechaCad());
+        RequestBody idpunto = RequestBody.create(MediaType.parse("text/plain"), idPunto);
+        Call<Productos> call = donService.crearProductoDon(nomAlimPart,cantidadPart,fechaCadPart,idpunto, qrCodeValue);
+        call.enqueue(new Callback<Productos>() {
+            @Override
+            public void onResponse(Call<Productos> call, Response<Productos> response) {
+                if (response.isSuccessful()) {
+                    Productos createdProducto = response.body();
+                    Toast.makeText(requireContext(), "Producto agregado", Toast.LENGTH_SHORT).show();
+                    limpito();
+                }else{
+                    Toast.makeText(requireContext(), "El producto no se pudó agregar correctamente",Toast.LENGTH_SHORT).show();
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<Productos> call, Throwable t) {
+                Toast.makeText(requireContext(), "Error de conexion", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+    }
+    public void finalizarDon(String qrCode){
+        retro = retroClient.getRetrofitInstance().create(retroService.class);
+        Call<JsonObject> call = retro.fdona(qrCode);
+        call.enqueue(new Callback<JsonObject>() {
+            @Override
+            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    qrval.setText("");
+                    nomD.setText("");
+                    fechD.setText("");
+                    cantD.setText("");
+                    txt.setVisibility(View.INVISIBLE);
+                    nomD.setVisibility(View.INVISIBLE);
+                    cantD.setVisibility(View.INVISIBLE);
+                    fechD.setVisibility(View.INVISIBLE);
+                    addDon.setVisibility(View.INVISIBLE);
+                    finD.setVisibility(View.INVISIBLE);
+                    Toast.makeText(requireContext(), "Donación Finalizada", Toast.LENGTH_SHORT).show();
+                }
+
+            }
+            @Override
+            public void onFailure(Call<JsonObject> call, Throwable t) {
+                Toast.makeText(requireContext(), "Fallo en la comunicación", Toast.LENGTH_SHORT).show();
+            }
+
+        });
+
+    }
+    public void limpito(){
+        nomD.setText("");
+        fechD.setText("");
+        cantD.setText("");
+    }
 }

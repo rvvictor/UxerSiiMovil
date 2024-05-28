@@ -79,6 +79,7 @@ public class SlideshowFragment extends Fragment {
                                     Bundle bundle = new Bundle();
                                     bundle.putString("qrCode", qrCodeValue);
                                     getParentFragmentManager().setFragmentResult("requestKey", bundle);
+                                    Log.d("LOG", "el qr q se manda es: " + bundle);
                                 }
                             }
                         } else {

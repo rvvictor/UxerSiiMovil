@@ -40,4 +40,75 @@
         android:layout_marginTop="80dp"
         android:layout_marginEnd="313dp"
         android:src="@drawable/escaner" />
+
+    <Button
+        android:id="@+id/añadirdon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginStart="158dp"
+        android:layout_marginBottom="134dp"
+        android:text="Añadir"
+        android:visibility="invisible"/>
+
+    <Button
+        android:id="@+id/finDon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginEnd="107dp"
+        android:layout_marginBottom="53dp"
+        android:text="Finalizar Donación"
+        android:visibility="invisible"/>
+
+    <EditText
+        android:id="@+id/nombDona"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="235dp"
+        android:ems="10"
+        android:inputType="text"
+        android:hint="Nombre del alimento"
+        android:visibility="invisible"/>
+
+    <TextView
+        android:id="@+id/altasDona"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="157dp"
+        android:text="Añade tus productos a donar"
+        android:textColor="@color/black"
+        android:visibility="invisible"/>
+
+    <EditText
+        android:id="@+id/cantDon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerInParent="true"
+        android:layout_marginTop="337dp"
+        android:ems="10"
+        android:inputType="number"
+        android:hint="Cantidad"
+        android:visibility="invisible"/>
+
+    <EditText
+        android:id="@+id/dateDon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="234dp"
+        android:ems="10"
+        android:inputType="date"
+        android:hint="Fecha de Caducidad"
+        android:visibility="invisible"/>
 </RelativeLayout>

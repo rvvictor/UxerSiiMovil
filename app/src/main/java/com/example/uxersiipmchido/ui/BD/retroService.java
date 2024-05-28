@@ -46,6 +46,9 @@ public interface retroService {
     @GET("api/v1/fcompra/{qr}/")
     Call<JsonObject> fcompra(@Path("qr") String qr);
 
+    @GET("api/v1/fdona/{qr}/")
+    Call<JsonObject> fdona(@Path("qr") String qr);
+
     @POST("api/v1/postalimentosdon/{qr}/")
     Call<Productos> crearProductoDon(
             @Part("nomb_alim_dona") RequestBody nomAlim,

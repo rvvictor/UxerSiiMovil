@@ -3,6 +3,7 @@ package com.example.uxersiipmchido;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.Menu;
 import android.view.View;
@@ -37,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
     private FloatingActionButton fab;
     private NavController navController;
     retroService retro;
-    private String qrCode;  // Variable para almacenar el QR
+    private String qrCode;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,19 +88,22 @@ public class MainActivity extends AppCompatActivity {
         navController.addOnDestinationChangedListener((controller, destination, arguments) -> {
             int destinationId = destination.getId();
             if (destinationId == R.id.nav_buscar) {
-                fab.setImageResource(R.drawable.finalizar);  // Cambiar icono del FAB
+                fab.setImageResource(R.drawable.finalizar);
                 fab.setOnClickListener(view -> showSlideshowPopup());
+
+            } else if (destinationId == R.id.nav_donacion) {
+                fab.hide();
             } else {
-                fab.setImageResource(R.drawable.anadir);  // Icono por defecto del FAB
+                fab.setImageResource(R.drawable.anadir);
                 fab.setOnClickListener(view -> handleFabClick());
             }
         });
 
-        // Configurar el listener para recibir el QR
         getSupportFragmentManager().setFragmentResultListener("requestKey", this, new FragmentResultListener() {
             @Override
             public void onFragmentResult(@NonNull String requestKey, @NonNull Bundle bundle) {
                 qrCode = bundle.getString("qrCode");
+                Log.d("LOG", "El qr q se recibe es: " + qrCode);
             }
         });
     }

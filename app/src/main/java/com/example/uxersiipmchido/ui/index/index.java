@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+import android.widget.Toolbar;
 
 import com.example.uxersiipmchido.MainActivity;
 import com.example.uxersiipmchido.R;
@@ -32,6 +33,8 @@ public class index extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_index);
+
+
 
         iniciarB = findViewById(R.id.iniciarSesion);
         cod=findViewById(R.id.cod);
