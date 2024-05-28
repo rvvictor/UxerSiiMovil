@@ -75,6 +75,10 @@ public class SlideshowFragment extends Fragment {
                                     qrCodeValue = intentResult.getContents();
                                     Toast.makeText(requireContext(), qrCodeValue, Toast.LENGTH_SHORT).show();
                                     qrval.setText(qrCodeValue);
+
+                                    Bundle bundle = new Bundle();
+                                    bundle.putString("qrCode", qrCodeValue);
+                                    getParentFragmentManager().setFragmentResult("requestKey", bundle);
                                 }
                             }
                         } else {
@@ -82,6 +86,7 @@ public class SlideshowFragment extends Fragment {
                         }
                     }
             );
+
 
             scan.setOnClickListener(new View.OnClickListener() {
                 @Override

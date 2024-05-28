@@ -50,7 +50,7 @@ public class altasF extends DialogFragment {
     int REQUEST_IMAGE_CAPTURE = 1;
     String fechaFormateada;
     Retrofit retrofit;
-    static final String BASE_URL="https://781hhnms-8000.usw3.devtunnels.ms/uxersiiPruebas/" ;
+    static final String BASE_URL="https:/k91n550s-8000.usw3.devtunnels.ms/uxersiiPruebas/" ;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,

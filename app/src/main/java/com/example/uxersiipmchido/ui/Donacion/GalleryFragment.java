@@ -102,7 +102,7 @@ public class GalleryFragment extends Fragment {
         call.enqueue(new Callback<JsonObject>() {
             @Override
             public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
-
+                
             }
 
             @Override
