@@ -30,10 +30,6 @@ public interface retroService {
             @Part("id_punto") RequestBody idpunto,
             @Part MultipartBody.Part imagen
     );
-    @PUT("api/v1/alimentosE")
-    Call<Void> actualizarProducto(@Path("id") int id, @Body Productos producto);
-    @DELETE("api/v1/alimentosD")
-    Call<Void> eliminarProducto(@Path("id") int id);
 
     @GET("api/v1/valcod/{codigo}/")
     Call<JsonObject> validarCodigo(@Path("codigo") String codigo);
@@ -49,12 +45,13 @@ public interface retroService {
     @GET("api/v1/fdona/{qr}/")
     Call<JsonObject> fdona(@Path("qr") String qr);
 
+    @Multipart
     @POST("api/v1/postalimentosdon/{qr}/")
     Call<Productos> crearProductoDon(
-            @Part("nomb_alim_dona") RequestBody nomAlim,
-            @Part("catn_adon") RequestBody cantidad,
-            @Part("fecha_cad_dona") RequestBody fechaCad,
-            @Part("id_punto") RequestBody idpunto,
+            @Part("nomb_alim_dona") RequestBody nomb_alim_dona,
+            @Part("catn_adon") RequestBody catn_adon,
+            @Part("fecha_cad_dona") RequestBody fecha_cad_dona,
+            @Part("id_punto") RequestBody id_punto,
             @Path("qr") String qr
     );
 }

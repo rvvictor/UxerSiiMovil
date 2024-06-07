@@ -3,6 +3,39 @@ package com.example.uxersiipmchido.ui.BD;
 import com.google.gson.annotations.SerializedName;
 
 public class Productos {
+    @SerializedName("nomb_alim_dona")
+    private String nomAlimDona;
+
+    @SerializedName("catn_adon")
+    private int cantidadDona;
+
+    @SerializedName("fecha_cad_dona")
+    private String fechaCadDona;
+
+    public String getNomAlimDona() {
+        return nomAlimDona;
+    }
+
+    public void setNomAlimDona(String nomAlimDona) {
+        this.nomAlimDona = nomAlimDona;
+    }
+
+    public int getCantidadDona() {
+        return cantidadDona;
+    }
+
+    public void setCantidadDona(int cantidadDona) {
+        this.cantidadDona = cantidadDona;
+    }
+
+    public String getFechaCadDona() {
+        return fechaCadDona;
+    }
+
+    public void setFechaCadDona(String fechaCadDona) {
+        this.fechaCadDona = fechaCadDona;
+    }
+
     @SerializedName("nomb_alim")
     private String nomAlim;
     @SerializedName("cantidad")

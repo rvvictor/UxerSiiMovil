@@ -1,6 +1,7 @@
 package com.example.uxersiipmchido.ui.Buscar;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
@@ -23,11 +24,11 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.uxersiipmchido.R;
-import com.example.uxersiipmchido.databinding.FragmentSlideshowBinding;
 import com.example.uxersiipmchido.ui.BD.Productos;
 import com.example.uxersiipmchido.ui.BD.ProductosAdapter;
 import com.example.uxersiipmchido.ui.BD.retroClient;
 import com.example.uxersiipmchido.ui.BD.retroService;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
@@ -51,6 +52,7 @@ public class SlideshowFragment extends Fragment {
 
     ListView listaCompra;
     ProductosAdapter adap;
+    private FloatingActionButton fabBus;
         @Nullable
         @Override
         public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -60,7 +62,13 @@ public class SlideshowFragment extends Fragment {
             scan = view.findViewById(R.id.escaner);
             search = view.findViewById(R.id.buscar);
             listaCompra=view.findViewById(R.id.compraL);
-
+            fabBus = view.findViewById(R.id.fabBus);
+            fabBus.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    showSlideshowPopup();
+                }
+            });
 
             // Initialize the ActivityResultLauncher
             qrScanLauncher = registerForActivityResult(
@@ -73,6 +81,7 @@ public class SlideshowFragment extends Fragment {
                                     Toast.makeText(requireContext(), "Operación cancelada", Toast.LENGTH_SHORT).show();
                                 } else {
                                     qrCodeValue = intentResult.getContents();
+
                                     Toast.makeText(requireContext(), qrCodeValue, Toast.LENGTH_SHORT).show();
                                     qrval.setText(qrCodeValue);
 
@@ -107,6 +116,7 @@ public class SlideshowFragment extends Fragment {
         }
 
         private void buscarCode() {
+            qrCodeValue = qrval.getText().toString();
             retro = retroClient.getRetrofitInstance().create(retroService.class);
             Call<JsonObject> call = retro.buscarQR(qrCodeValue);
             call.enqueue(new Callback<JsonObject>() {
@@ -159,6 +169,42 @@ public class SlideshowFragment extends Fragment {
             });
         }
 
+    private void showSlideshowPopup() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
+        builder.setTitle("Finalizar Compra")
+                .setMessage("¿Quieres finalizar la compra?")
+                .setPositiveButton("Sí", (dialog, which) -> {
+                    if (qrCodeValue != null) {
+                        Log.d("QRCode", "QR Code Value: " + qrCodeValue);
+                        finalizarCompra(qrCodeValue);
+                    }
+                })
+                .setNegativeButton("No", (dialog, which) -> dialog.dismiss())
+                .setCancelable(true)
+                .create()
+                .show();
+    }
+    private void finalizarCompra(String qrCode) {
+        retro = retroClient.getRetrofitInstance().create(retroService.class);
+        Call<JsonObject> call = retro.fcompra(qrCode);
+        call.enqueue(new Callback<JsonObject>() {
+            @Override
+            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    Log.d("FinalizarCompra", "Respuesta del servidor: " + response.body().toString());
+                    Toast.makeText(requireContext(), "Compra Finalizada", Toast.LENGTH_SHORT).show();
+                } else {
+                    Log.e("FinalizarCompra", "Error en la respuesta del servidor: " + response.errorBody());
+                    Toast.makeText(requireContext(), "Error al finalizar la compra", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<JsonObject> call, Throwable t) {
+                Toast.makeText(requireContext(), "Fallo en la comunicación", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
         private void escanearQR() {
             IntentIntegrator intentIntegrator = new IntentIntegrator(requireActivity());
             qrScanLauncher.launch(intentIntegrator.createScanIntent());

@@ -23,12 +23,12 @@
 
     <ImageView
         android:id="@+id/buscar"
-        android:layout_width="28dp"
-        android:layout_height="25dp"
+        android:layout_width="36dp"
+        android:layout_height="32dp"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
-        android:layout_marginTop="84dp"
-        android:layout_marginEnd="100dp"
+        android:layout_marginTop="80dp"
+        android:layout_marginEnd="53dp"
         android:src="@drawable/lupa" />
 
     <ImageView
@@ -48,4 +48,13 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="0dp" />
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fabBus"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        android:src="@drawable/finalizar" />
 </RelativeLayout>

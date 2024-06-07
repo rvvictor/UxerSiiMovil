@@ -23,12 +23,12 @@
 
     <ImageView
         android:id="@+id/buscar"
-        android:layout_width="28dp"
-        android:layout_height="25dp"
+        android:layout_width="47dp"
+        android:layout_height="34dp"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
-        android:layout_marginTop="84dp"
-        android:layout_marginEnd="100dp"
+        android:layout_marginTop="79dp"
+        android:layout_marginEnd="40dp"
         android:src="@drawable/lupa" />
 
     <ImageView
@@ -48,10 +48,10 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginStart="158dp"
-        android:layout_marginBottom="134dp"
+        android:layout_marginStart="160dp"
+        android:layout_marginBottom="146dp"
         android:text="Añadir"
-        android:visibility="invisible"/>
+        android:visibility="invisible" />
 
     <Button
         android:id="@+id/finDon"
@@ -106,9 +106,9 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="234dp"
+        android:layout_marginBottom="256dp"
         android:ems="10"
-        android:inputType="date"
         android:hint="Fecha de Caducidad"
-        android:visibility="invisible"/>
+        android:inputType="date"
+        android:visibility="invisible" />
 </RelativeLayout>

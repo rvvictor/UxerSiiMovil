@@ -88,8 +88,7 @@ public class MainActivity extends AppCompatActivity {
         navController.addOnDestinationChangedListener((controller, destination, arguments) -> {
             int destinationId = destination.getId();
             if (destinationId == R.id.nav_buscar) {
-                fab.setImageResource(R.drawable.finalizar);
-                fab.setOnClickListener(view -> showSlideshowPopup());
+                fab.hide();
 
             } else if (destinationId == R.id.nav_donacion) {
                 fab.hide();
@@ -99,13 +98,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        getSupportFragmentManager().setFragmentResultListener("requestKey", this, new FragmentResultListener() {
-            @Override
-            public void onFragmentResult(@NonNull String requestKey, @NonNull Bundle bundle) {
-                qrCode = bundle.getString("qrCode");
-                Log.d("LOG", "El qr q se recibe es: " + qrCode);
-            }
-        });
     }
 
     private void handleFabClick() {
@@ -114,39 +106,7 @@ public class MainActivity extends AppCompatActivity {
         altasf.show(getSupportFragmentManager(), "formulario_dialog");
     }
 
-    private void showSlideshowPopup() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Finalizar Compra")
-                .setMessage("¿Quieres finalizar la compra?")
-                .setPositiveButton("Sí", (dialog, which) -> {
-                    if (qrCode != null) {
-                        finalizarCompra(qrCode);
-                    }
-                })
-                .setNegativeButton("No", (dialog, which) -> dialog.dismiss())
-                .setCancelable(true)
-                .create()
-                .show();
-    }
 
-    private void finalizarCompra(String qrCode) {
-        retro = retroClient.getRetrofitInstance().create(retroService.class);
-        Call<JsonObject> call = retro.fcompra(qrCode);
-        call.enqueue(new Callback<JsonObject>() {
-            @Override
-            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
-                if (response.isSuccessful() && response.body() != null) {
-                    Toast.makeText(MainActivity.this, "Compra Finalizada", Toast.LENGTH_SHORT).show();
-                }
-
-        }
-            @Override
-            public void onFailure(Call<JsonObject> call, Throwable t) {
-                Toast.makeText(MainActivity.this, "Fallo en la comunicación", Toast.LENGTH_SHORT).show();
-            }
-
-        });
-    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

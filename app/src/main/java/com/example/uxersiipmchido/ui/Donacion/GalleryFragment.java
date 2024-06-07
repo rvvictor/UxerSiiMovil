@@ -69,7 +69,12 @@ public class GalleryFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_gallery, container, false);
-        idPunto = getArguments().getString("id_producto");
+        if (getActivity() != null){
+            Intent intent = getActivity().getIntent();
+            if (intent != null && intent.hasExtra("id_producto")){
+                idPunto = intent.getStringExtra("id_producto");
+            }
+            }
         qrval = view.findViewById(R.id.qrcode);
         txt=view.findViewById(R.id.altasDona);
         scan = view.findViewById(R.id.escaner);
@@ -143,6 +148,7 @@ public class GalleryFragment extends Fragment {
         return view;
     }
     private void buscarCode() {
+        qrCodeValue=qrval.getText().toString();
         retro = retroClient.getRetrofitInstance().create(retroService.class);
         Call<JsonObject> call = retro.buscarQRDon(qrCodeValue);
         call.enqueue(new Callback<JsonObject>() {
@@ -191,14 +197,22 @@ public class GalleryFragment extends Fragment {
     }
     public void altasDon(){
         Productos producto = new Productos();
-        producto.setNomAlim(nomD.getText().toString());
-        producto.setCantidad(Integer.parseInt(cantD.getText().toString()));
-        producto.setFechaCad(fechaFormateada);
+        producto.setNomAlimDona(nomD.getText().toString());
+        producto.setCantidadDona(Integer.parseInt(cantD.getText().toString()));
+        producto.setFechaCadDona(fechaFormateada);
         retroService donService = retrofit.create(retroService.class);
-        RequestBody nomAlimPart = RequestBody.create(MediaType.parse("text/plain"), producto.getNomAlim());
-        RequestBody cantidadPart = RequestBody.create(MediaType.parse("text/plain"), String.valueOf(producto.getCantidad()));
-        RequestBody fechaCadPart = RequestBody.create(MediaType.parse("text/plain"), producto.getFechaCad());
+        RequestBody nomAlimPart = RequestBody.create(MediaType.parse("text/plain"), producto.getNomAlimDona());
+        RequestBody cantidadPart = RequestBody.create(MediaType.parse("text/plain"), String.valueOf(producto.getCantidadDona()));
+        RequestBody fechaCadPart = RequestBody.create(MediaType.parse("text/plain"), producto.getFechaCadDona());
         RequestBody idpunto = RequestBody.create(MediaType.parse("text/plain"), idPunto);
+
+        Log.d("altasDon", "nomAlim: " + producto.getNomAlimDona());
+        Log.d("altasDon", "cantidad: " + producto.getCantidadDona());
+        Log.d("altasDon", "fechaCad: " + producto.getFechaCadDona());
+        Log.d("altasDon", "idPunto: " + idPunto);
+        Log.d("altasDon", "qrCodeValue: " + qrCodeValue);
+
+
         Call<Productos> call = donService.crearProductoDon(nomAlimPart,cantidadPart,fechaCadPart,idpunto, qrCodeValue);
         call.enqueue(new Callback<Productos>() {
             @Override
