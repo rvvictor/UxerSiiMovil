@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.Menu;
 import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
@@ -31,7 +32,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     private AppBarConfiguration mAppBarConfiguration;
     private ActivityMainBinding binding;
@@ -39,14 +40,20 @@ public class MainActivity extends AppCompatActivity {
     private NavController navController;
     retroService retro;
     private String qrCode;
+    Button botonia;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+
+
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         setSupportActionBar(binding.appBarMain.toolbar);
+
+        botonia = findViewById(R.id.button);
+        botonia.setOnClickListener(this);
 
         fab = binding.appBarMain.fab;
         fab.setOnClickListener(new View.OnClickListener() {
@@ -118,5 +125,15 @@ public class MainActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
         return NavigationUI.navigateUp(navController, mAppBarConfiguration)
                 || super.onSupportNavigateUp();
+    }
+
+    @Override
+    public void onClick(View v) {
+        String cadena = ((Button)v).getText().toString();
+
+        if (cadena.equals("ia")){
+            Intent intent = new Intent(this, iapruebas.class);
+            startActivity(intent);
+        }
     }
 }
