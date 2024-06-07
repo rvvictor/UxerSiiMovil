@@ -192,6 +192,7 @@ public class SlideshowFragment extends Fragment {
             public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     Log.d("FinalizarCompra", "Respuesta del servidor: " + response.body().toString());
+                    limpito();
                     Toast.makeText(requireContext(), "Compra Finalizada", Toast.LENGTH_SHORT).show();
                 } else {
                     Log.e("FinalizarCompra", "Error en la respuesta del servidor: " + response.errorBody());
@@ -208,5 +209,11 @@ public class SlideshowFragment extends Fragment {
         private void escanearQR() {
             IntentIntegrator intentIntegrator = new IntentIntegrator(requireActivity());
             qrScanLauncher.launch(intentIntegrator.createScanIntent());
+        }
+        private void limpito(){
+            qrval.setText("");
+            listaCompra.setAdapter(null);
+            fabBus.setVisibility(View.GONE);
+
         }
     }

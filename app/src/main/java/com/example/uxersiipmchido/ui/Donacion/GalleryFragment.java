@@ -1,6 +1,7 @@
 package com.example.uxersiipmchido.ui.Donacion;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -128,7 +129,19 @@ public class GalleryFragment extends Fragment {
         finD.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                finalizarDon(qrCodeValue);
+                AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
+                builder.setTitle("Finalizar Donación")
+                        .setMessage("¿Quieres finalizar la Donación?")
+                        .setPositiveButton("Sí", (dialog, which) -> {
+                            if (qrCodeValue != null) {
+                                Log.d("QRCode", "QR Code Value: " + qrCodeValue);
+                                finalizarDon(qrCodeValue);
+                            }
+                        })
+                        .setNegativeButton("No", (dialog, which) -> dialog.dismiss())
+                        .setCancelable(true)
+                        .create()
+                        .show();
             }
         });
         scan.setOnClickListener(new View.OnClickListener() {
@@ -245,12 +258,12 @@ public class GalleryFragment extends Fragment {
                     nomD.setText("");
                     fechD.setText("");
                     cantD.setText("");
-                    txt.setVisibility(View.INVISIBLE);
-                    nomD.setVisibility(View.INVISIBLE);
-                    cantD.setVisibility(View.INVISIBLE);
-                    fechD.setVisibility(View.INVISIBLE);
-                    addDon.setVisibility(View.INVISIBLE);
-                    finD.setVisibility(View.INVISIBLE);
+                    txt.setVisibility(View.GONE);
+                    nomD.setVisibility(View.GONE);
+                    cantD.setVisibility(View.GONE);
+                    fechD.setVisibility(View.GONE);
+                    addDon.setVisibility(View.GONE);
+                    finD.setVisibility(View.GONE);
                     Toast.makeText(requireContext(), "Donación Finalizada", Toast.LENGTH_SHORT).show();
                 }
 
