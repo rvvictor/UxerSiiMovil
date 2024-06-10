@@ -63,7 +63,7 @@ public class GalleryFragment extends Fragment {
     Retrofit retrofit;
     String qrCodeValue;
     retroService retro;
-    static final String BASE_URL="https:/k91n550s-8000.usw3.devtunnels.ms/uxersiiPruebas/" ;
+    static final String BASE_URL="https://781hhnms-8000.usw3.devtunnels.ms/uxersiiPruebas/" ;
 
     String idPunto;
     @Nullable
@@ -174,6 +174,9 @@ public class GalleryFragment extends Fragment {
                     fechD.setVisibility(View.VISIBLE);
                     addDon.setVisibility(View.VISIBLE);
                     finD.setVisibility(View.VISIBLE);
+                } else {
+                    // Aquí manejas el caso en que la respuesta no es exitosa
+                    Toast.makeText(requireContext(), "Codigo Erroneo o inexistente" , Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -214,6 +217,7 @@ public class GalleryFragment extends Fragment {
         producto.setCantidadDona(Integer.parseInt(cantD.getText().toString()));
         producto.setFechaCadDona(fechaFormateada);
         retroService donService = retrofit.create(retroService.class);
+        retro = retroClient.getRetrofitInstance().create(retroService.class);
         RequestBody nomAlimPart = RequestBody.create(MediaType.parse("text/plain"), producto.getNomAlimDona());
         RequestBody cantidadPart = RequestBody.create(MediaType.parse("text/plain"), String.valueOf(producto.getCantidadDona()));
         RequestBody fechaCadPart = RequestBody.create(MediaType.parse("text/plain"), producto.getFechaCadDona());
@@ -226,7 +230,7 @@ public class GalleryFragment extends Fragment {
         Log.d("altasDon", "qrCodeValue: " + qrCodeValue);
 
 
-        Call<Productos> call = donService.crearProductoDon(nomAlimPart,cantidadPart,fechaCadPart,idpunto, qrCodeValue);
+        Call<Productos> call = retro.crearProductoDon(nomAlimPart,cantidadPart,fechaCadPart,idpunto, qrCodeValue);
         call.enqueue(new Callback<Productos>() {
             @Override
             public void onResponse(Call<Productos> call, Response<Productos> response) {
