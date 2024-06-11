@@ -56,5 +56,6 @@
         android:layout_alignParentBottom="true"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="16dp"
-        android:src="@drawable/finalizar" />
+        android:src="@drawable/finalizar"
+        android:visibility="gone"/>
 </RelativeLayout>

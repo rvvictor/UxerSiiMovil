@@ -87,7 +87,9 @@ public class GalleryFragment extends Fragment {
         addDon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                altasDon();
+                if (validarCampos()){
+                    altasDon();
+                }
             }
         });
 
@@ -135,7 +137,7 @@ public class GalleryFragment extends Fragment {
                         .setPositiveButton("Sí", (dialog, which) -> {
                             if (qrCodeValue != null) {
                                 Log.d("QRCode", "QR Code Value: " + qrCodeValue);
-                                finalizarDon(qrCodeValue);
+                                finalizarDon();
                             }
                         })
                         .setNegativeButton("No", (dialog, which) -> dialog.dismiss())
@@ -187,6 +189,25 @@ public class GalleryFragment extends Fragment {
 
         });
     }
+    private boolean validarCampos() {
+        if (nomD.getText().toString().isEmpty()) {
+            Toast.makeText(requireContext(), "Ingrese el nombre del producto", Toast.LENGTH_SHORT).show();
+            nomD.requestFocus();
+            return false;
+        }
+        if (cantD.getText().toString().isEmpty()) {
+            Toast.makeText(requireContext(), "Ingrese la cantidad del producto", Toast.LENGTH_SHORT).show();
+            cantD.requestFocus();
+            return false;
+        }
+        if (fechD.getText().toString().isEmpty()) {
+            Toast.makeText(requireContext(), "Ingrese la fecha de caducidad", Toast.LENGTH_SHORT).show();
+            fechD.requestFocus();
+            return false;
+        }
+        return true;
+    }
+
     private void escanearQR() {
         IntentIntegrator intentIntegrator = new IntentIntegrator(requireActivity());
         qrScanLauncher.launch(intentIntegrator.createScanIntent());
@@ -251,13 +272,7 @@ public class GalleryFragment extends Fragment {
         });
 
     }
-    public void finalizarDon(String qrCode){
-        retro = retroClient.getRetrofitInstance().create(retroService.class);
-        Call<JsonObject> call = retro.fdona(qrCode);
-        call.enqueue(new Callback<JsonObject>() {
-            @Override
-            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
-                if (response.isSuccessful() && response.body() != null) {
+    public void finalizarDon(){
                     qrval.setText("");
                     nomD.setText("");
                     fechD.setText("");
@@ -269,16 +284,6 @@ public class GalleryFragment extends Fragment {
                     addDon.setVisibility(View.GONE);
                     finD.setVisibility(View.GONE);
                     Toast.makeText(requireContext(), "Donación Finalizada", Toast.LENGTH_SHORT).show();
-                }
-
-            }
-            @Override
-            public void onFailure(Call<JsonObject> call, Throwable t) {
-                Toast.makeText(requireContext(), "Fallo en la comunicación", Toast.LENGTH_SHORT).show();
-            }
-
-        });
-
     }
     public void limpito(){
         nomD.setText("");

@@ -96,11 +96,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             int destinationId = destination.getId();
             if (destinationId == R.id.nav_buscar) {
                 fab.hide();
-
             } else if (destinationId == R.id.nav_donacion) {
                 fab.hide();
             } else {
                 fab.setImageResource(R.drawable.anadir);
+                fab.show();
                 fab.setOnClickListener(view -> handleFabClick());
             }
         });
